@@ -173,11 +173,22 @@ export class MidtransClient {
 
   /** GET /v2/{order_id}/status */
   async status(orderId: string): Promise<TransactionStatus> {
-    return this.request<TransactionStatus>(
+    const body = await this.request<TransactionStatus>(
       this.apiUrl(`/v2/${encodeURIComponent(orderId)}/status`),
       { method: "GET" },
       { errorMessage: `Failed to fetch status for order "${orderId}"` },
     );
+    // Some Midtrans deployments answer unknown orders with HTTP 200 and a
+    // body-level {"status_code":"404","status_message":"Transaction doesn't exist."}.
+    // Normalize that to a real not-found error so callers can't mistake it
+    // for a pending transaction.
+    if (body.status_code === "404") {
+      throw new MidtransError(
+        `Transaction not found for order "${orderId}" — no such order on this merchant.`,
+        { httpStatus: 404, statusMessage: body.status_message },
+      );
+    }
+    return body;
   }
 
   /** POST /v2/{order_id}/approve — accept a challenged card transaction. */

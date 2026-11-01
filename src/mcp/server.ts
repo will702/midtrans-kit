@@ -12,6 +12,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import { createRequire } from "node:module";
+import { pathToFileURL } from "node:url";
 
 import { MidtransClient } from "../core/client.js";
 import { resolveCredentials } from "../core/config.js";
@@ -286,7 +287,11 @@ export async function runMcpServer(): Promise<void> {
           serverKey: creds.serverKey,
           tamper,
         });
-        const response = await sendNotification(url, notification);
+        const response = await sendNotification(url, notification).catch((error: Error) => {
+          throw new Error(
+            `Could not reach ${url}: ${error.message}. Is the dev server running at that address?`,
+          );
+        });
         const verdict = tamper
           ? response.status >= 400
             ? "GOOD: handler rejected the tampered signature"
@@ -333,4 +338,10 @@ export async function runMcpServer(): Promise<void> {
   await server.connect(transport);
   // Log to stderr only — stdout is the MCP protocol channel.
   console.error(`midtrans-kit MCP server v${version} running (stdio)`);
+}
+
+// Run directly (node …/mcp/server.js or ./dist/mcp/server.js), not when the
+// CLI imports runMcpServer for `midtrans mcp`.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  await runMcpServer();
 }

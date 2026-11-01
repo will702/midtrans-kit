@@ -115,6 +115,26 @@ describe("MidtransClient", () => {
 
     fetchMock.mock.restore();
   });
+
+  it("status(): normalizes HTTP-200-with-body-404 to a not-found error", async () => {
+    const fetchMock = mock.fn(() =>
+      Promise.resolve(
+        jsonResponse(200, { status_code: "404", status_message: "Transaction doesn't exist.", id: "x" }),
+      ),
+    );
+    globalThis.fetch = fetchMock as unknown as typeof fetch;
+
+    await assert.rejects(
+      new MidtransClient({ serverKey: SANDBOX_KEY, environment: "sandbox" }).status("NOPE-1"),
+      (error: unknown) => {
+        assert.ok(error instanceof MidtransError);
+        assert.equal(error.httpStatus, 404);
+        assert.match(error.message, /not found/);
+        return true;
+      },
+    );
+    fetchMock.mock.restore();
+  });
 });
 
 describe("buildNotification", () => {
