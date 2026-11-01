@@ -1,0 +1,45 @@
+{
+  "name": "midtrans-kit",
+  "version": "0.1.0",
+  "description": "CLI + MCP server for seamless Midtrans payment integrations — built for beginners and non-backend developers.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "midtrans": "dist/cli/index.js"
+  },
+  "files": [
+    "dist",
+    "templates",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "tsx --test",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "midtrans",
+    "payment",
+    "payment-gateway",
+    "snap",
+    "cli",
+    "mcp",
+    "indonesia",
+    "webhook"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "commander": "^12.0.0",
+    "picocolors": "^1.1.0",
+    "smol-toml": "^1.3.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
