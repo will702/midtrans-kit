@@ -136,3 +136,7 @@ Structure: `src/core` (framework-free Midtrans logic — shared by CLI, MCP, and
 ## License
 
 MIT
+
+---
+
+**Not affiliated with Midtrans.** This is an independent community toolkit; Midtrans is a product of PT Midtrans. Official documentation: [docs.midtrans.com](https://docs.midtrans.com).
