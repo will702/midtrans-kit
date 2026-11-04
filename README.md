@@ -12,6 +12,12 @@ Midtrans has no official CLI, and existing community MCP servers are unmaintaine
 npx github:will702/midtrans-kit --help
 ```
 
+Pin a specific release (recommended for CI and shared setups):
+
+```bash
+npx github:will702/midtrans-kit#v0.1.0 --help
+```
+
 Global install (provides both `midtrans` and `midtrans-kit` commands):
 
 ```bash
