@@ -9,15 +9,17 @@ Midtrans has no official CLI, and existing community MCP servers are unmaintaine
 ## Install / run without installing
 
 ```bash
-npx midtrans-kit --help        # or: npm i -g midtrans-kit
-midtrans --version             # global install provides both `midtrans` and `midtrans-kit`
-```
-
-Straight from GitHub (works even before/without the npm release):
-
-```bash
 npx github:will702/midtrans-kit --help
 ```
+
+Global install (provides both `midtrans` and `midtrans-kit` commands):
+
+```bash
+npm i -g github:will702/midtrans-kit
+midtrans --version
+```
+
+> The npm registry release (`npx midtrans-kit`) is coming soon; until then use the GitHub form above.
 
 ## Quickstart (sandbox)
 
@@ -90,10 +92,10 @@ One login serves both the CLI and the MCP server.
 
 ```bash
 # Claude Code
-claude mcp add midtrans -- npx midtrans-kit mcp
+claude mcp add midtrans -- npx github:will702/midtrans-kit mcp
 
 # Cursor / ZCode / anything MCP — stdio command:
-npx midtrans-kit mcp
+npx github:will702/midtrans-kit mcp
 ```
 
 Tools: `create_snap_payment`, `get_transaction_status` (with fulfillment verdict), `approve/deny/cancel/expire/refund_transaction` (production-gated by `confirm: true`), `verify_webhook_signature`, `send_test_webhook_notification`, `search_midtrans_docs`.
