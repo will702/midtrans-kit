@@ -10,7 +10,13 @@ Midtrans has no official CLI, and existing community MCP servers are unmaintaine
 
 ```bash
 npx midtrans-kit --help        # or: npm i -g midtrans-kit
-midtrans --version
+midtrans --version             # global install provides both `midtrans` and `midtrans-kit`
+```
+
+Straight from GitHub (works even before/without the npm release):
+
+```bash
+npx github:will702/midtrans-kit --help
 ```
 
 ## Quickstart (sandbox)
