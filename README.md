@@ -2,7 +2,7 @@
 
 **CLI + MCP server for seamless [Midtrans](https://midtrans.com) payment integrations** — built for beginners and non-backend developers.
 
-Midtrans has no official CLI, and existing community MCP servers are unmaintained. midtrans-kit distills hardened patterns from production Midtrans integrations into one `npx`-able toolkit: create payments, check whether an order is safe to fulfill, test your webhook **locally without tunnels**, and scaffold a working integration in seconds.
+Midtrans has no official CLI, and existing community MCP servers are unmaintained. midtrans-kit distills hardened patterns from production Midtrans integrations into one toolkit you can run straight from GitHub with `npx`: create payments, check whether an order is safe to fulfill, test your webhook **locally without tunnels**, and scaffold a working integration in seconds.
 
 > Note on "OAuth login": Midtrans does **not** offer OAuth — it only has per-environment API keys (server key + client key). `midtrans login` is the closest safe equivalent: it validates your keys live against Midtrans, then stores them locally in `~/.midtrans/config.toml` (chmod 600) with multi-merchant profile support.
 
@@ -18,8 +18,6 @@ Global install (provides both `midtrans` and `midtrans-kit` commands):
 npm i -g github:will702/midtrans-kit
 midtrans --version
 ```
-
-> The npm registry release (`npx midtrans-kit`) is coming soon; until then use the GitHub form above.
 
 ## Quickstart (sandbox)
 
