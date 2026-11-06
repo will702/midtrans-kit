@@ -1,6 +1,6 @@
 {
-  "name": "midtrans-kit",
-  "version": "0.1.0",
+  "name": "@gregoriuswillson/midtrans-kit",
+  "version": "0.1.1",
   "description": "CLI + MCP server for seamless Midtrans payment integrations — built for beginners and non-backend developers.",
   "type": "module",
   "license": "MIT",
@@ -25,7 +25,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && chmod +x dist/cli/index.js",
     "prepare": "npm run build",
     "prepublishOnly": "npm run typecheck && npm test",
     "test": "tsx --test",
@@ -52,5 +52,14 @@
     "@types/node": "^22.0.0",
     "tsx": "^4.19.0",
     "typescript": "^5.6.0"
-  }
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "author": "Gregorius Willson"
 }

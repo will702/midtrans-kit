@@ -1,29 +1,44 @@
 # midtrans-kit
 
-**CLI + MCP server for seamless [Midtrans](https://midtrans.com) payment integrations** — built for beginners and non-backend developers.
+[![npm version](https://img.shields.io/npm/v/@gregoriuswillson/midtrans-kit.svg)](https://www.npmjs.com/package/@gregoriuswillson/midtrans-kit)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Midtrans has no official CLI, and existing community MCP servers are unmaintained. midtrans-kit distills hardened patterns from production Midtrans integrations into one toolkit you can run straight from GitHub with `npx`: create payments, check whether an order is safe to fulfill, test your webhook **locally without tunnels**, and scaffold a working integration in seconds.
+**CLI + MCP server + SDK for seamless [Midtrans](https://midtrans.com) payment integrations** — built for beginners and non-backend developers.
+
+Midtrans has no official CLI, and existing community MCP servers are unmaintained. `midtrans-kit` distills hardened patterns from production Midtrans integrations into one toolkit: create payments, check whether an order is safe to fulfill, test your webhook **locally without tunnels**, and scaffold a working integration in seconds.
 
 > Note on "OAuth login": Midtrans does **not** offer OAuth — it only has per-environment API keys (server key + client key). `midtrans login` is the closest safe equivalent: it validates your keys live against Midtrans, then stores them locally in `~/.midtrans/config.toml` (chmod 600) with multi-merchant profile support.
 
-## Install / run without installing
+## Installation & Running
+
+### Run instantly with `npx` (no install required)
+
+```bash
+npx @gregoriuswillson/midtrans-kit --help
+```
+
+### Global Install
+
+Provides both `midtrans` and `midtrans-kit` commands in your terminal:
+
+```bash
+npm install -g @gregoriuswillson/midtrans-kit
+midtrans --version
+```
+
+### Install as a Dependency in your project
+
+```bash
+npm install @gregoriuswillson/midtrans-kit
+```
+
+<details>
+<summary>Direct from GitHub (alternative)</summary>
 
 ```bash
 npx github:will702/midtrans-kit --help
 ```
-
-Pin a specific release (recommended for CI and shared setups):
-
-```bash
-npx github:will702/midtrans-kit#v0.1.0 --help
-```
-
-Global install (provides both `midtrans` and `midtrans-kit` commands):
-
-```bash
-npm i -g github:will702/midtrans-kit
-midtrans --version
-```
+</details>
 
 ## Quickstart (sandbox)
 
@@ -96,15 +111,46 @@ One login serves both the CLI and the MCP server.
 
 ```bash
 # Claude Code
-claude mcp add midtrans -- npx github:will702/midtrans-kit mcp
+claude mcp add midtrans -- npx -y @gregoriuswillson/midtrans-kit mcp
 
-# Cursor / ZCode / anything MCP — stdio command:
-npx github:will702/midtrans-kit mcp
+# Cursor / Windsurf / Claude Desktop (stdio command)
+npx -y @gregoriuswillson/midtrans-kit mcp
 ```
 
 Tools: `create_snap_payment`, `get_transaction_status` (with fulfillment verdict), `approve/deny/cancel/expire/refund_transaction` (production-gated by `confirm: true`), `verify_webhook_signature`, `send_test_webhook_notification`, `search_midtrans_docs`.
 
 So you can tell your agent: *"create a 25000 IDR sandbox payment and give me the link"* or *"send a settlement webhook to my local server and make sure it's accepted"*.
+
+## TypeScript / Node.js Library Usage
+
+You can also import and use `midtrans-kit` programmatically:
+
+```ts
+import {
+  MidtransClient,
+  verifySignature,
+  mapTransactionStatus
+} from "@gregoriuswillson/midtrans-kit";
+
+const client = new MidtransClient({
+  serverKey: process.env.MIDTRANS_SERVER_KEY!,
+  clientKey: process.env.MIDTRANS_CLIENT_KEY,
+  isProduction: false,
+});
+
+// Create Snap payment
+const { token, redirect_url } = await client.createSnapTransaction({
+  transaction_details: {
+    order_id: "ORDER-123",
+    gross_amount: 50000,
+  },
+});
+
+// Check status with safe-to-fulfill verdict
+const status = await client.status("ORDER-123");
+const verdict = mapTransactionStatus(status.transaction_status, status.fraud_status);
+// verdict: 'paid' | 'pending' | 'failed' | 'expired'
+```
 
 ## Scaffolding
 
